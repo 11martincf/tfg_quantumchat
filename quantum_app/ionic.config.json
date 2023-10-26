@@ -1,0 +1,7 @@
+{
+  "name": "quantum_app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

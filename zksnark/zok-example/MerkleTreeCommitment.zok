@@ -1,0 +1,37 @@
+import "hashes/sha256/512bitPadded" as hash;
+import "utils/casts/u32_to_bits" as u32_to_bits;
+import "hashes/sha256/256bitPadded" as sha256;
+
+const u32 DEPTH = 15;
+
+def select(bool condition, u32[8] left, u32[8] right) -> (u32[8], u32[8]) {
+	return (condition ? right : left, condition ? left : right);
+}
+
+def verify_tree(u32[8] root, u32[8] leaf, bool[DEPTH] directionSelector, u32[DEPTH][8] path) -> bool {
+    // Start from the leaf
+    u32[8] mut digest = leaf;
+
+	// Loop up the tree
+	for u32 i in 0..DEPTH {
+		(u32[8], u32[8]) s = select(directionSelector[DEPTH - 1 - i], digest, path[i]);
+		digest = hash(s.0, s.1);
+	}
+
+    return digest == root;
+}
+
+def main(u32[8] root, u32[8] nullifier, private u32[8] commitment, private u32 commIndex, private u32[DEPTH][8] path, private u32[8] pubKey, private u32[8] privKey, private u32[8] sigma) {
+
+	u32[8] commDigest = hash(pubKey, sigma);
+	u32[8] nullDigest = hash(privKey, sigma);
+
+	assert(commDigest == commitment);
+	assert(nullDigest == nullifier);
+
+	bool[32] bitsIndex = u32_to_bits(commIndex);
+	bool[DEPTH] directionSelector = bitsIndex[(32-DEPTH)..32];
+
+	bool tree_result = verify_tree(root, commitment, directionSelector, path);
+	assert (tree_result);
+}

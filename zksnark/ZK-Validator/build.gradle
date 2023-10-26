@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'com.google.code.gson:gson:2.10'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+    implementation group: 'com.jcraft', name: 'jsch', version: '0.1.55'
+    implementation group: 'org.slf4j', name: 'slf4j-jdk14', version: '2.0.0-alpha0'
+    implementation 'com.intellij:forms_rt:7.0.3'
+    implementation files('NFC_Reader-1.0.jar')
+}
+
+test {
+    useJUnitPlatform()
+}

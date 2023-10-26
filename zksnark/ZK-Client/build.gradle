@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+}
+
+group 'org.qkdlab'
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'com.google.code.gson:gson:2.10'
+    implementation group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.0'
+    implementation group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.1.0.Final'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': 'org.qkdlab.nfc.Main'
+    }
+    baseName = "ZKClient"
+}
+
+task fatJar(type: Jar) {
+    manifest.from jar.manifest
+    classifier = 'all'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
+    with jar
+}
+
+test {
+    useJUnitPlatform()
+}
