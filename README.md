@@ -1,2 +1,3 @@
-# tfg_quantumchat
-Repositorio con mi trabajo de fin de grado de Ingeniería Informática
+# martin.castro.fernandez
+
+TFG de Martín Castro Fernández
